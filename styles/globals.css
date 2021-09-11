@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 a {
@@ -13,4 +14,17 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #F53825;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+code {
+  font-size: large;
+  font-style: italic;
 }
