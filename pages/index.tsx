@@ -110,11 +110,9 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className={styles.logo}>
-          <Image
+          <img
             src="/logo-ceramic.svg"
             alt="Ceramic Logo"
-            width={"100vw"}
-            height={"100%"}
           />
         </div>
         <p>

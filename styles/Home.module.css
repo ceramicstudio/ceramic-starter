@@ -97,8 +97,8 @@
   margin-bottom: 2rem;
 }
 
-.logo div {
-  display: inherit !important;
+.logo img {
+  width: 100%;
 }
 
 .main p {
