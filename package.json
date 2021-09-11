@@ -1,5 +1,6 @@
 {
   "name": "ceramic-starter",
+  "description": "Boilerplate for Ceramic-based dApp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
