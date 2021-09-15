@@ -1,5 +1,7 @@
 This is an example application that uses [Ceramic](https://ceramic.network), based on [Next.js](https://nextjs.org/).
 
+Deployed to https://ceramic-starter.ukstv.me.
+
 Fork it freely.
 
 ## Getting Started
