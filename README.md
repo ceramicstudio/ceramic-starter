@@ -1,6 +1,6 @@
 This is an example application that uses [Ceramic](https://ceramic.network), based on [Next.js](https://nextjs.org/).
 
-Deployed to https://ceramic-starter.ukstv.me.
+Deployed to https://ceramic-starter.ukstv.me via [Fleek](https://fleek.co)
 
 Fork it freely.
 
