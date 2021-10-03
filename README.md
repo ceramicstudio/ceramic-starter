@@ -9,7 +9,7 @@ Fork it freely.
 After installing the dependencies, add a token to [INFURA](https://infura.io) for WalletConnect to work by adding a file `.env.local`:
 
 ```shell
-INFURA_TOKEN=some-secret-token
+NEXT_PUBLIC_INFURA_TOKEN=some-secret-token
 ```
 
 Then run the development server:

@@ -9,7 +9,7 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from "web3";
 
-const INFURA_TOKEN = process.env.INFURA_TOKEN;
+const INFURA_TOKEN = process.env.NEXT_PUBLIC_INFURA_TOKEN;
 
 async function connect(): Promise<AuthProvider> {
   const web3Modal = new Web3Modal({
