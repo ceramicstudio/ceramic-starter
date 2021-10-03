@@ -51,8 +51,7 @@ function SignInWithCeramic() {
   const handleLogin = async () => {
     setProgress(true);
     try {
-      const authProvider = await ceramic.connect();
-      await ceramic.authenticate(authProvider);
+      await ceramic.authenticate();
     } catch (e) {
       console.error(e);
     } finally {
@@ -110,10 +109,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className={styles.logo}>
-          <img
-            src="/logo-ceramic.svg"
-            alt="Ceramic Logo"
-          />
+          <img src="/logo-ceramic.svg" alt="Ceramic Logo" />
         </div>
         <p>
           This is a <a href={"https://ceramic.network"}>Ceramic</a> and{" "}

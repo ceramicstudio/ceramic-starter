@@ -6,7 +6,13 @@ Fork it freely.
 
 ## Getting Started
 
-After installing the dependencies, run the development server:
+After installing the dependencies, add a token to [INFURA](https://infura.io) for WalletConnect to work by adding a file `.env.local`:
+
+```shell
+INFURA_TOKEN=some-secret-token
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
