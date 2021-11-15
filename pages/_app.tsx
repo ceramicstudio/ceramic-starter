@@ -10,7 +10,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from "web3";
 import * as ipfsHttpClient from "ipfs-http-client";
 import * as uint8arrays from "uint8arrays";
-import { base64url } from "multiformats/bases/base64"
+import { base64url } from "multiformats/bases/base64";
 import { CarReader, CarWriter } from "@ipld/car";
 import { from } from "ix/asynciterable";
 
@@ -22,11 +22,11 @@ function asIso(timestamp: number): string {
 }
 
 async function collect(input: AsyncIterable<Uint8Array>): Promise<Uint8Array> {
-  let acc = new Uint8Array([])
+  let acc = new Uint8Array([]);
   for await (let elem of input) {
-    acc = uint8arrays.concat([acc, elem])
+    acc = uint8arrays.concat([acc, elem]);
   }
-  return acc
+  return acc;
 }
 
 function resourcesList(resources: string[]): string {
@@ -55,7 +55,7 @@ async function connect(): Promise<AuthProvider> {
   const accounts = await web3.eth.getAccounts();
 
   const chainId = await web3.eth.getChainId();
-  const ipfsClient = ipfsHttpClient.create({ url: "http://localhost:5001" });
+  const ipfsClient = ipfsHttpClient.create({ url: "http://localhost:5011" });
 
   const account = accounts[0];
   const cacao = {
@@ -64,7 +64,7 @@ async function connect(): Promise<AuthProvider> {
     },
     p: {
       aud: "http://localhost:3000",
-      iss: `did:pkh:eth:${account}`,
+      iss: `${account}`,
       uri: "http://localhost:3000/login",
       version: 1,
       nonce: 328917,
@@ -80,7 +80,9 @@ async function connect(): Promise<AuthProvider> {
         "https://example.com/my-web2-claim.json",
       ],
     },
-    s: [] as any[],
+    s: {
+      s: new Uint8Array([])
+    }
   };
 
   const ssiPayload =
@@ -107,9 +109,7 @@ async function connect(): Promise<AuthProvider> {
     "base16"
   );
   console.log("signature", signature.replace(/^0x/, ""));
-  cacao.s.push({
-    s: signatureBytes,
-  });
+  cacao.s.s = signatureBytes;
   console.log("cacao", cacao);
   const cid = await ipfsClient.dag.put(cacao);
   console.log("cid", cid.toString());
@@ -117,16 +117,16 @@ async function connect(): Promise<AuthProvider> {
   console.log("cacao-restored", JSON.stringify(cacaoRestored, null, 4));
   const block = await ipfsClient.block.get(cid);
   const { writer, out } = CarWriter.create([cid]);
-  const outPromise = collect(out)
+  const outPromise = collect(out);
   await writer.put({
     cid: cid,
     bytes: block,
   });
   await writer.close();
-  const outResult = await outPromise
-  console.log('output-car-cacao', outResult)
-  const base64urlEncoded = base64url.encode(outResult)
-  console.log('base64url-car-cacao', base64urlEncoded)
+  const outResult = await outPromise;
+  console.log("output-car-cacao", outResult);
+  const base64urlEncoded = base64url.encode(outResult);
+  console.log("base64url-car-cacao", base64urlEncoded);
 
   return new EthereumAuthProvider(provider, accounts[0]);
 }
