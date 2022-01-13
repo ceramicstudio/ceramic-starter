@@ -12,7 +12,8 @@ import * as ipfsHttpClient from "ipfs-http-client";
 import * as uint8arrays from "uint8arrays";
 import { base64url } from "multiformats/bases/base64";
 import { CarReader, CarWriter } from "@ipld/car";
-import { from } from "ix/asynciterable";
+import {DateTime} from "luxon";
+import * as caip from 'caip'
 
 const INFURA_TOKEN = process.env.NEXT_PUBLIC_INFURA_TOKEN;
 
@@ -55,23 +56,23 @@ async function connect(): Promise<AuthProvider> {
   const accounts = await web3.eth.getAccounts();
 
   const chainId = await web3.eth.getChainId();
-  const ipfsClient = ipfsHttpClient.create({ url: "http://localhost:5011" });
+  const ipfsClient = ipfsHttpClient.create({ url: "http://localhost:5001" });
 
   const account = accounts[0];
+  const iss = `did:pkh:eip155:${chainId}:${account}`
   const cacao = {
     h: {
       t: "eip4361-eip191",
     },
     p: {
       aud: "http://localhost:3000",
-      iss: `${account}`,
+      iss: iss,
       uri: "http://localhost:3000/login",
       version: 1,
       nonce: 328917,
-      chainId: chainId,
-      iat: Math.floor(new Date().valueOf() / 1000),
-      nbf: Math.floor(new Date().valueOf() / 1000),
-      exp: Math.floor(new Date().valueOf() / 1000) + 60 * 60, // 1 hour
+      iat: DateTime.now().toISO(),
+      nbf: DateTime.now().toISO(),
+      exp: DateTime.now().plus({hour: 1}).toISO(), // 1 hour
       statement:
         "I accept the ServiceOrg Terms of Service: https://service.org/tos",
       requestId: "request-id-random",
@@ -85,6 +86,7 @@ async function connect(): Promise<AuthProvider> {
     }
   };
 
+  const chainIdRestored = (caip.AccountId.parse(iss.replace(`did:pkh:`, '')).chainId as any).reference
   const ssiPayload =
     `${cacao.p.aud} wants you to sign in with your Ethereum account:\n` +
     account +
@@ -94,11 +96,11 @@ async function connect(): Promise<AuthProvider> {
     "\n" +
     `URI: ${cacao.p.uri}\n` +
     `Version: ${cacao.p.version}\n` +
-    `Chain ID: ${cacao.p.chainId}\n` +
+    `Chain ID: ${chainIdRestored}\n` +
     `Nonce: ${cacao.p.nonce}\n` +
-    `Issued At: ${asIso(cacao.p.iat)}\n` +
-    `Expiration Time: ${asIso(cacao.p.exp)}\n` +
-    `Not Before: ${asIso(cacao.p.nbf)}\n` +
+    `Issued At: ${cacao.p.iat}\n` +
+    `Expiration Time: ${cacao.p.exp}\n` +
+    `Not Before: ${cacao.p.nbf}\n` +
     `Request ID: ${cacao.p.requestId}\n` +
     `Resources:\n ${resourcesList(cacao.p.resources)}`;
 
@@ -110,7 +112,7 @@ async function connect(): Promise<AuthProvider> {
   );
   console.log("signature", signature.replace(/^0x/, ""));
   cacao.s.s = signatureBytes;
-  console.log("cacao", cacao);
+  console.log("cacao", JSON.stringify(cacao));
   const cid = await ipfsClient.dag.put(cacao);
   console.log("cid", cid.toString());
   const cacaoRestored = await ipfsClient.dag.get(cid);
