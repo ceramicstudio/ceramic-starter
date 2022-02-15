@@ -1,3 +1,7 @@
+> ⚠️🛑 **DEPRECATED** in favor of `Self.id Templates` 🛑⚠️
+>
+> Please, use [Self.id Templates](https://github.com/ceramicstudio/self.id/tree/main/templates) for starting with Ceramic on Next.js, Vite, or Webpack.
+
 This is an example application that uses [Ceramic](https://ceramic.network), based on [Next.js](https://nextjs.org/).
 
 Deployed to https://ceramic-starter.ukstv.me via [Fleek](https://fleek.co)
